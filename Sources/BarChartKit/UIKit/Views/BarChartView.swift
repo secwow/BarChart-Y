@@ -56,13 +56,31 @@ public final class BarChartView: UIView {
                 self.value = value
             }
         }
+        
+        public struct AxisDelimeter: Equatable {
+            public let color: UIColor
+            public let label: String?
+            public let value: Double
+
+            public init(color: UIColor, label: String?, value: Double) {
+                self.color = color
+                self.label = label
+                self.value = value
+            }
+        }
 
         public let elements: [DataElement]
         public let limit: Limit?
+        public let delimeters: [AxisDelimeter]
 
-        public init(elements: [BarChartView.DataSet.DataElement], limit: Limit? = nil) {
+        public init(
+            elements: [BarChartView.DataSet.DataElement],
+            limit: Limit? = nil,
+            delimeters: [AxisDelimeter]? = nil
+        ) {
             self.elements = elements
             self.limit = limit
+            self.delimeters = delimeters ?? []
         }
     }
 
@@ -198,9 +216,42 @@ public final class BarChartView: UIView {
         if let limit = dataSet.limit, let elementParentView = elementViews.first?.bars.first?.superview {
             draw(limit: limit, elementParentView: elementParentView, maxValue: CGFloat(maxValue))
         }
+        
+        for delimeter in dataSet.delimeters {
+            if let elementParentView = elementViews.first?.bars.first?.superview {
+                addDelimeter(elementParentView: elementParentView, delimeter: delimeter)
+            }
+        }
 
         guard let firstNonZeroElement = Array(dataSet.elements.reversed()).first(where: { !$0.bars.filter({ $0.value > 0 }).isEmpty }) else { return }
         select(element: firstNonZeroElement)
+    }
+    
+    private func addDelimeter(elementParentView: UIView, delimeter: DataSet.AxisDelimeter) {
+        elementParentView.setNeedsLayout()
+        elementParentView.layoutIfNeeded()
+
+        let point = elementParentView.bounds.size.height / maxValue
+
+        var bottomPadding = CGFloat(limit.value) * point
+
+        let limitView = LimitView()
+        limitView.label.text = limit.label
+        limitView.label.textColor = limit.color
+        limitView.strokeColor = limit.color
+        chartStackView.addSubview(limitView)
+        limitView.translatesAutoresizingMaskIntoConstraints = false
+
+        if bottomPadding < barWidth {
+            bottomPadding = barWidth
+        }
+
+        NSLayoutConstraint.activate([
+            limitView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            limitView.bottomAnchor.constraint(equalTo: elementParentView.bottomAnchor, constant: -bottomPadding),
+            limitView.leadingAnchor.constraint(equalTo: chartStackView.leadingAnchor),
+            limitView.trailingAnchor.constraint(equalTo: chartStackView.trailingAnchor)
+        ])
     }
 
     private func draw(limit: DataSet.Limit, elementParentView: UIView, maxValue: CGFloat) {
