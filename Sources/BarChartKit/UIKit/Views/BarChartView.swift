@@ -231,14 +231,14 @@ public final class BarChartView: UIView {
         elementParentView.setNeedsLayout()
         elementParentView.layoutIfNeeded()
 
-        let point = elementParentView.bounds.size.height / maxValue
+        let point = elementParentView.bounds.size.height / delimeter.value
 
-        var bottomPadding = CGFloat(limit.value) * point
+        var bottomPadding = CGFloat(delimeter.value) * point
 
-        let limitView = LimitView()
-        limitView.label.text = limit.label
-        limitView.label.textColor = limit.color
-        limitView.strokeColor = limit.color
+        let limitView = AxisDelimeterView()
+        limitView.label.text = delimeter.label
+        limitView.label.textColor = delimeter.color
+        limitView.strokeColor = delimeter.color
         chartStackView.addSubview(limitView)
         limitView.translatesAutoresizingMaskIntoConstraints = false
 

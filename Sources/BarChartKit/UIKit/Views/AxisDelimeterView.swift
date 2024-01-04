@@ -54,14 +54,14 @@ final class AxisDelimeterView: UIView {
             label.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 15)
         ])
 
-        addSubview(dashedView)
-        dashedView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(lineView)
+        lineView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dashedView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 2),
-            dashedView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            dashedView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dashedView.trailingAnchor.constraint(equalTo: label.trailingAnchor),
-            dashedView.heightAnchor.constraint(equalToConstant: 1)
+            lineView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 2),
+            lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            lineView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            lineView.trailingAnchor.constraint(equalTo: label.trailingAnchor),
+            lineView.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
 }
