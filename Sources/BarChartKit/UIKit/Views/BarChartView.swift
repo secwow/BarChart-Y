@@ -187,6 +187,10 @@ public final class BarChartView: UIView {
         if let limit = dataSet.limit {
             values.append(limit.value)
         }
+        
+        for delimeter in dataSet.delimeters {
+            values.append(delimeter.value)
+        }
 
         let maxValue = values.max() ?? 0.0
 
@@ -219,7 +223,7 @@ public final class BarChartView: UIView {
         
         for delimeter in dataSet.delimeters {
             if let elementParentView = elementViews.first?.bars.first?.superview {
-                addDelimeter(elementParentView: elementParentView, delimeter: delimeter)
+                addDelimeter(elementParentView: elementParentView, delimeter: delimeter, maxValue: CGFloat(maxValue))
             }
         }
 
@@ -227,11 +231,15 @@ public final class BarChartView: UIView {
         select(element: firstNonZeroElement)
     }
     
-    private func addDelimeter(elementParentView: UIView, delimeter: DataSet.AxisDelimeter) {
+    private func addDelimeter(
+        elementParentView: UIView,
+        delimeter: DataSet.AxisDelimeter,
+        maxValue: CGFloat
+    ) {
         elementParentView.setNeedsLayout()
         elementParentView.layoutIfNeeded()
 
-        let point = elementParentView.bounds.size.height / delimeter.value
+        let point = elementParentView.bounds.size.height / maxValue
 
         var bottomPadding = CGFloat(delimeter.value) * point
 
@@ -240,6 +248,7 @@ public final class BarChartView: UIView {
         limitView.label.textColor = delimeter.color
         limitView.strokeColor = delimeter.color
         chartStackView.addSubview(limitView)
+        chartStackView.sendSubviewToBack(limitView)
         limitView.translatesAutoresizingMaskIntoConstraints = false
 
         if bottomPadding < barWidth {

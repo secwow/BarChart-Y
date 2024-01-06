@@ -13,12 +13,12 @@ final class AxisDelimeterView: UIView {
         .init()
     }()
 
-    var strokeColor: UIColor {
+    var strokeColor: UIColor? {
         get {
-            UIColor(cgColor: dashedView.strokeColor)
+            backgroundColor
         }
         set {
-            dashedView.strokeColor = newValue.cgColor
+            lineView.backgroundColor = newValue
         }
     }
 
@@ -45,23 +45,27 @@ final class AxisDelimeterView: UIView {
     }
 #endif
     private func commonInit() {
+        addSubview(lineView)
+        
         addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: topAnchor),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor),
             label.heightAnchor.constraint(equalToConstant: 16),
-            label.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 15)
         ])
-
-        addSubview(lineView)
+        
         lineView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            lineView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 2),
-            lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            lineView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: -8),
+            lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8),
             lineView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            lineView.trailingAnchor.constraint(equalTo: label.trailingAnchor),
-            lineView.heightAnchor.constraint(equalToConstant: 1)
+            lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            lineView.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: lineView.leadingAnchor, constant: -13),
         ])
     }
 }
+#endif
