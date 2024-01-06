@@ -21,11 +21,20 @@ public final class BarChartView: UIView {
                 public let value: Double
                 public let color: UIColor
                 public let selectionColor: UIColor
+                public let font: UIFont
 
+                public init(value: Double, color: UIColor, selectionColor: UIColor, font: UIFont) {
+                    self.value = value
+                    self.color = color
+                    self.selectionColor = selectionColor
+                    self.font = font
+                }
+                
                 public init(value: Double, color: UIColor, selectionColor: UIColor) {
                     self.value = value
                     self.color = color
                     self.selectionColor = selectionColor
+                    self.font = UIFont.systemFont(ofSize: 14)
                 }
             }
 
@@ -61,11 +70,13 @@ public final class BarChartView: UIView {
             public let color: UIColor
             public let label: String?
             public let value: Double
+            public let font: UIFont
 
-            public init(color: UIColor, label: String?, value: Double) {
+            public init(color: UIColor, label: String?, value: Double, font: UIFont) {
                 self.color = color
                 self.label = label
                 self.value = value
+                self.font = font
             }
         }
 
@@ -200,6 +211,7 @@ public final class BarChartView: UIView {
             chartStackView.addArrangedSubview(parentView)
 
             let label = ChartLabel()
+            label.font = element.bars.first?.font
             add(label: label, parentView: parentView, element: element, dataSet: dataSet)
 
             let barStackView = UIStackView()
@@ -247,6 +259,7 @@ public final class BarChartView: UIView {
         limitView.label.text = delimeter.label
         limitView.label.textColor = delimeter.color
         limitView.strokeColor = delimeter.color
+        limitView.label.font = delimeter.font
         chartStackView.addSubview(limitView)
         chartStackView.sendSubviewToBack(limitView)
         limitView.translatesAutoresizingMaskIntoConstraints = false
