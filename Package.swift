@@ -16,10 +16,6 @@ let package = Package(
         .library(
             name: "BarChartKit-static",
             type: .static,
-            targets: ["BarChartKit"]),
-        .library(
-            name: "BarChartKit-dynamic",
-            type: .dynamic,
             targets: ["BarChartKit"])
     ],
     dependencies: [
